@@ -18,20 +18,16 @@ class MainActivity : AppCompatActivity(), CountersView {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
 
-        val clickListener = View.OnClickListener {
-            presenter.counterClick(it.id)
-        }
+        val clickListenerBtn1 = View.OnClickListener { presenter.counterClickOne() }
+        val clickListenerBtn2 = View.OnClickListener { presenter.counterClickTwo() }
+        val clickListenerBtn3 = View.OnClickListener { presenter.counterClickThree() }
 
-        binding?.btnCounter1?.setOnClickListener(clickListener)
-        binding?.btnCounter2?.setOnClickListener(clickListener)
-        binding?.btnCounter3?.setOnClickListener(clickListener)
+        binding?.btnCounter1?.setOnClickListener(clickListenerBtn1)
+        binding?.btnCounter2?.setOnClickListener(clickListenerBtn2)
+        binding?.btnCounter3?.setOnClickListener(clickListenerBtn3)
     }
 
-        override fun setBtnText(index: Int, text: String) {
-        when (index) {
-            0 -> binding?.btnCounter1?.text = text
-            1 -> binding?.btnCounter2?.text = text
-            2 -> binding?.btnCounter3?.text = text
-        }
-    }
+    override fun setBtnOneText(text: String) { binding?.btnCounter1?.text = text }
+    override fun setBtnTwoText(text: String) { binding?.btnCounter2?.text = text }
+    override fun setBtnThreeText(text: String) { binding?.btnCounter3?.text = text }
 }
