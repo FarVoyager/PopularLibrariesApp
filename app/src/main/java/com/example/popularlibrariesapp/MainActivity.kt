@@ -4,26 +4,26 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.example.popularlibrariesapp.databinding.ActivityMainBinding
+import com.example.popularlibrariesapp.model.CountersModel
 import com.example.popularlibrariesapp.presenter.CountersPresenter
 import com.example.popularlibrariesapp.view.CountersView
+import moxy.MvpAppCompatActivity
+import moxy.ktx.moxyPresenter
+import moxy.presenter.InjectPresenter
 
-class MainActivity : AppCompatActivity(), CountersView {
+class MainActivity : MvpAppCompatActivity(), CountersView {
 
     private var binding: ActivityMainBinding? = null
-    private val presenter = CountersPresenter(this)
+    private val presenter by moxyPresenter { CountersPresenter(CountersModel()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
 
-        val clickListenerBtn1 = View.OnClickListener { presenter.counterClickOne() }
-        val clickListenerBtn2 = View.OnClickListener { presenter.counterClickTwo() }
-        val clickListenerBtn3 = View.OnClickListener { presenter.counterClickThree() }
-
-        binding?.btnCounter1?.setOnClickListener(clickListenerBtn1)
-        binding?.btnCounter2?.setOnClickListener(clickListenerBtn2)
-        binding?.btnCounter3?.setOnClickListener(clickListenerBtn3)
+        binding?.btnCounter1?.setOnClickListener { presenter.counterClickOne() }
+        binding?.btnCounter2?.setOnClickListener { presenter.counterClickTwo() }
+        binding?.btnCounter3?.setOnClickListener { presenter.counterClickThree() }
     }
 
     override fun setBtnOneText(text: String) { binding?.btnCounter1?.text = text }
