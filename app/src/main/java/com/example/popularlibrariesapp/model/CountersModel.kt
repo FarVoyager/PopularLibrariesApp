@@ -1,8 +1,7 @@
 package com.example.popularlibrariesapp.model
 
 class CountersModel {
-
-    val counters = mutableListOf(0, 0, 0)
+    val counters = mutableListOf(0,0,0)
 
     fun getCurrent(index: Int): Int {
         return counters[index]
@@ -13,8 +12,8 @@ class CountersModel {
         return getCurrent(index)
     }
 
-    fun set(index: Int, value: Int){
+    fun set(index: Int, value: Int) {
         counters[index] = value
     }
-}
 
+}

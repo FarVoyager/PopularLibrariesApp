@@ -1,5 +1,7 @@
 package com.example.popularlibrariesapp.view
 
 interface CountersView {
-    fun setBtnText(index: Int, text: String)
+    fun setBtnOneText(text: String)
+    fun setBtnTwoText(text: String)
+    fun setBtnThreeText(text: String)
 }
