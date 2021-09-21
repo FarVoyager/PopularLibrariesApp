@@ -2,11 +2,11 @@ package com.example.popularlibrariesapp.model
 
 class GitHubUsersRepo {
     private val repositories = listOf(
-        GitHubUser("login1"),
-        GitHubUser("login2"),
-        GitHubUser("login3"),
-        GitHubUser("login4"),
-        GitHubUser("login5")
+        GitHubUser("DarthVaderShinobi"),
+        GitHubUser("MiwkaUbivawka"),
+        GitHubUser("FastAsHeckBoi"),
+        GitHubUser("Onotole1"),
+        GitHubUser("LexaPetrov666")
         )
 
     fun getUsers(): List<GitHubUser> {
