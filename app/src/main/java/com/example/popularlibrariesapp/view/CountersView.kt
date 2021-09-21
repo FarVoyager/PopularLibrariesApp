@@ -6,7 +6,7 @@ import moxy.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface CountersView: MvpView {
-    fun setBtnOneText(text: String)
-    fun setBtnTwoText(text: String)
-    fun setBtnThreeText(text: String)
+    fun init()
+    fun updateList()
+
 }

@@ -1,23 +1,43 @@
 package com.example.popularlibrariesapp.presenter
 
 import com.example.popularlibrariesapp.model.CountersModel
+import com.example.popularlibrariesapp.model.GitHubUser
+import com.example.popularlibrariesapp.model.GitHubUsersRepo
+import com.example.popularlibrariesapp.recyclerView.IUserListPresenter
+import com.example.popularlibrariesapp.recyclerView.UserItemView
 import com.example.popularlibrariesapp.view.CountersView
 import moxy.InjectViewState
 import moxy.MvpPresenter
 
-class CountersPresenter(private val model: CountersModel): MvpPresenter<CountersView>() {
+class CountersPresenter(private val usersRepo: GitHubUsersRepo): MvpPresenter<CountersView>() {
 
-    fun counterClickOne() {
-        val nextValue = model.next(0)
-        viewState.setBtnOneText(nextValue.toString())
+    class UsersListPresenter: IUserListPresenter {
+        val users = mutableListOf<GitHubUser>()
+        override var itemClickListener: ((UserItemView) -> Unit)? = null
+        override fun bindView(view: UserItemView) {
+            val user = users[view.pos]
+            view.setLogin(user.login)
+        }
+        override fun getCount(): Int {
+           return users.size
+        }
     }
-    fun counterClickTwo() {
-        val nextValue = model.next(1)
-        viewState.setBtnTwoText(nextValue.toString())
+
+    val usersListPresenter = UsersListPresenter()
+
+    override fun onFirstViewAttach() {
+        super.onFirstViewAttach()
+        viewState.init()
+        loadData()
+        usersListPresenter.itemClickListener = { itemView ->
+            //переход на экран пользователя
+        }
     }
-    fun counterClickThree() {
-        val nextValue = model.next(2)
-        viewState.setBtnThreeText(nextValue.toString())
+
+    private fun loadData() {
+        val usersList = usersRepo.getUsers()
+        usersListPresenter.users.addAll(usersList)
+        viewState.updateList()
     }
 
 }
