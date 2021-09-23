@@ -1,6 +1,6 @@
 package com.example.popularlibrariesapp.model
 
-class GitHubUsersRepo {
+class GitHubUsersRepo: IGitHubUsersRepo {
     private val repositories = listOf(
         GitHubUser("DarthVaderShinobi"),
         GitHubUser("MiwkaUbivawka"),
@@ -9,7 +9,7 @@ class GitHubUsersRepo {
         GitHubUser("LexaPetrov666")
         )
 
-    fun getUsers(): List<GitHubUser> {
+    override fun getUsers(): List<GitHubUser> {
         return repositories
     }
 }

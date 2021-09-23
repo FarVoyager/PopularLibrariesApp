@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.example.popularlibrariesapp.model.GitHubUser
 import com.example.popularlibrariesapp.model.GitHubUsersRepo
+import com.example.popularlibrariesapp.model.IGitHubUsersRepo
 import com.example.popularlibrariesapp.recyclerView.IUserListPresenter
 import com.example.popularlibrariesapp.recyclerView.UserItemView
 import com.example.popularlibrariesapp.screens.AndroidScreens
@@ -11,11 +12,13 @@ import com.example.popularlibrariesapp.screens.IScreens
 import com.example.popularlibrariesapp.view.UsersView
 import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.Screen
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.disposables.Disposable
 import moxy.MvpPresenter
 
 const val LOGIN_KEY = "LOGIN_KEY"
 
-class UsersPresenter(private val usersRepo: GitHubUsersRepo, val router: Router, val screens: IScreens): MvpPresenter<UsersView>() {
+class UsersPresenter(private val usersRepo: IGitHubUsersRepo, val router: Router, val screens: IScreens): MvpPresenter<UsersView>() {
 
     class UsersListPresenter: IUserListPresenter {
         val users = mutableListOf<GitHubUser>()
@@ -44,8 +47,20 @@ class UsersPresenter(private val usersRepo: GitHubUsersRepo, val router: Router,
     }
 
     private fun loadData() {
-        val usersList = usersRepo.getUsers()
-        usersListPresenter.users.addAll(usersList)
+        var disposable: Disposable? = null
+        Observable.fromIterable(usersRepo.getUsers())
+            .doOnSubscribe { d ->
+                disposable = d
+            }
+                .subscribe({
+                    usersListPresenter.users.add(it)
+                    println("onNext: user ${it.login} added!")
+                },{
+                    println("onError: error adding user to list!")
+                }, {
+                    disposable?.dispose()
+                    println("onComplete: disposable is disposed!")
+                })
         viewState.updateList()
     }
 
