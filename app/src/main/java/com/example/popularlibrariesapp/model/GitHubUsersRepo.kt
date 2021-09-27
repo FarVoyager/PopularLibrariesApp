@@ -1,6 +1,7 @@
 package com.example.popularlibrariesapp.model
 
 class GitHubUsersRepo {
+
     private val repositories = listOf(
         GitHubUser("DarthVaderShinobi"),
         GitHubUser("MiwkaUbivawka"),
