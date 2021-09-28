@@ -6,29 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.popularlibrariesapp.databinding.FragmentInfoBinding
-import com.example.popularlibrariesapp.databinding.FragmentUsersBinding
 import com.example.popularlibrariesapp.model.GitHubUser
-import com.example.popularlibrariesapp.model.GitHubUsersRepo
 import com.example.popularlibrariesapp.presenter.GITHUB_USER_KEY
 import com.example.popularlibrariesapp.presenter.InfoPresenter
-import com.example.popularlibrariesapp.presenter.LOGIN_KEY
-import com.example.popularlibrariesapp.presenter.UsersPresenter
-import com.example.popularlibrariesapp.screens.AndroidScreens
 import com.example.popularlibrariesapp.view.BackButtonListener
 import com.example.popularlibrariesapp.view.InfoView
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
-import kotlin.math.log
 
 class InfoFragment : MvpAppCompatFragment(), InfoView, BackButtonListener {
 
     private var binding: FragmentInfoBinding? = null
     private val presenter by moxyPresenter { InfoPresenter(App.instance.router, arguments?.getParcelable<GitHubUser>(GITHUB_USER_KEY)) }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        println("${arguments?.getParcelable<GitHubUser>(GITHUB_USER_KEY)} BEBO")
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +32,10 @@ class InfoFragment : MvpAppCompatFragment(), InfoView, BackButtonListener {
 
     override fun backPressed() = presenter.backPressed()
 
+    override fun setLogin(login: String) {
+        binding?.infoLogin?.text = login
+    }
+
     companion object {
         fun newInstance(user: GitHubUser): Fragment {
             val fragment = InfoFragment()
@@ -51,9 +44,5 @@ class InfoFragment : MvpAppCompatFragment(), InfoView, BackButtonListener {
             fragment.arguments = bundle
             return fragment
         }
-    }
-
-    override fun setLogin(login: String) {
-        binding?.infoLogin?.text = login
     }
 }

@@ -12,10 +12,6 @@ RecyclerView.Adapter<UsersRecyclerViewAdapter.ViewHolder>(){
         val _binding = RecyclerItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val viewHolder = ViewHolder(_binding)
         viewHolder.itemView.setOnClickListener { presenter.itemClickListener?.invoke(viewHolder) }
-
-//        ViewHolder(RecyclerItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)).apply {
-//            itemView.setOnClickListener { presenter.itemClickListener?.invoke(this) }
-//        }
         return viewHolder
     }
 
@@ -27,9 +23,7 @@ RecyclerView.Adapter<UsersRecyclerViewAdapter.ViewHolder>(){
         presenter.bindView(holder.apply { pos = position })
     }
 
-
-
-    inner class ViewHolder(val binding: RecyclerItemBinding): RecyclerView.ViewHolder(binding.root), UserItemView {
+    inner class ViewHolder(private val binding: RecyclerItemBinding): RecyclerView.ViewHolder(binding.root), UserItemView {
         override var pos = -1
         override fun setLogin(text: String) {
             binding.tvLogin.text = text

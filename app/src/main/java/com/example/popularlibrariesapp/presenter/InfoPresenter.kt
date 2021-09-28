@@ -21,8 +21,6 @@ class InfoPresenter(private val router: Router, private val user: GitHubUser?): 
     fun setLoginHeader() {
         if (user != null) {
             viewState.setLogin(user.login)
-        } else {
-            println("login is null BEB")
         }
     }
 }
