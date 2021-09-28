@@ -29,7 +29,7 @@ RecyclerView.Adapter<UsersRecyclerViewAdapter.ViewHolder>(){
 
 
 
-    inner class ViewHolder(val binding: RecyclerItemBinding): RecyclerView.ViewHolder(binding.root), UserItemView {
+    inner class ViewHolder(private val binding: RecyclerItemBinding): RecyclerView.ViewHolder(binding.root), UserItemView {
         override var pos = -1
         override fun setLogin(text: String) {
             binding.tvLogin.text = text

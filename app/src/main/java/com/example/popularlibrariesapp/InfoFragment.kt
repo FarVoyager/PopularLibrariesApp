@@ -6,22 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.popularlibrariesapp.databinding.FragmentInfoBinding
-import com.example.popularlibrariesapp.databinding.FragmentUsersBinding
-import com.example.popularlibrariesapp.model.GitHubUsersRepo
+import com.example.popularlibrariesapp.model.GitHubUser
 import com.example.popularlibrariesapp.presenter.InfoPresenter
-import com.example.popularlibrariesapp.presenter.LOGIN_KEY
-import com.example.popularlibrariesapp.presenter.UsersPresenter
-import com.example.popularlibrariesapp.screens.AndroidScreens
+import com.example.popularlibrariesapp.presenter.GITHUB_USER_KEY
 import com.example.popularlibrariesapp.view.BackButtonListener
 import com.example.popularlibrariesapp.view.InfoView
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
-import kotlin.math.log
 
 class InfoFragment : MvpAppCompatFragment(), InfoView, BackButtonListener {
 
     var binding: FragmentInfoBinding? = null
-    private val presenter by moxyPresenter { InfoPresenter(App.instance.router) }
+    private val presenter by moxyPresenter { InfoPresenter(App.instance.router, arguments?.get(GITHUB_USER_KEY) as GitHubUser) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,12 +27,7 @@ class InfoFragment : MvpAppCompatFragment(), InfoView, BackButtonListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setLogin()
-    }
-
-    private fun setLogin() {
-        val login: String = this.arguments?.get(LOGIN_KEY) as String
-        presenter.setLoginHeader(login)
+        presenter.setLoginHeader()
     }
 
     override fun backPressed() = presenter.backPressed()
@@ -46,8 +37,10 @@ class InfoFragment : MvpAppCompatFragment(), InfoView, BackButtonListener {
     }
 
     companion object {
-        fun newInstance(bundle: Bundle): InfoFragment {
+        fun newInstance(user: GitHubUser): Fragment {
             val fragment = InfoFragment()
+            val bundle = Bundle()
+            bundle.putParcelable(GITHUB_USER_KEY, user)
             fragment.arguments = bundle
             return fragment
         }

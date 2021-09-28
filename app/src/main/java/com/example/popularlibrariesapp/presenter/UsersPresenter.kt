@@ -16,9 +16,9 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.Disposable
 import moxy.MvpPresenter
 
-const val LOGIN_KEY = "LOGIN_KEY"
+const val GITHUB_USER_KEY = "GITHUB_USER_KEY"
 
-class UsersPresenter(private val usersRepo: IGitHubUsersRepo, val router: Router, val screens: IScreens): MvpPresenter<UsersView>() {
+class UsersPresenter(private val usersRepo: IGitHubUsersRepo, private val router: Router, private val screens: IScreens): MvpPresenter<UsersView>() {
 
     class UsersListPresenter: IUserListPresenter {
         val users = mutableListOf<GitHubUser>()
@@ -40,9 +40,7 @@ class UsersPresenter(private val usersRepo: IGitHubUsersRepo, val router: Router
         loadData()
         usersListPresenter.itemClickListener = { itemView ->
             //переход на экран пользователя
-            val bundle = Bundle()
-            bundle.putString(LOGIN_KEY, usersRepo.getUsers()[itemView.pos].login)
-            router.navigateTo(screens.info(bundle), true)
+            router.navigateTo(screens.info(usersRepo.getUsers()[itemView.pos]), true)
         }
     }
 
