@@ -6,18 +6,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.popularlibrariesapp.databinding.FragmentInfoBinding
+import com.example.popularlibrariesapp.model.network.ApiHolder
 import com.example.popularlibrariesapp.model.network.GitHubUser
+import com.example.popularlibrariesapp.model.network.GitHubUsersRepo
 import com.example.popularlibrariesapp.presenter.InfoPresenter
 import com.example.popularlibrariesapp.presenter.GITHUB_USER_KEY
 import com.example.popularlibrariesapp.view.BackButtonListener
 import com.example.popularlibrariesapp.view.InfoView
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
 class InfoFragment : MvpAppCompatFragment(), InfoView, BackButtonListener {
 
     var binding: FragmentInfoBinding? = null
-    private val presenter by moxyPresenter { InfoPresenter(App.instance.router, arguments?.get(GITHUB_USER_KEY) as GitHubUser) }
+    private val presenter by moxyPresenter {
+        InfoPresenter(
+            AndroidSchedulers.mainThread(),
+            App.instance.router,
+            arguments?.get(GITHUB_USER_KEY) as GitHubUser,
+            GitHubUsersRepo(ApiHolder.api)
+    )}
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

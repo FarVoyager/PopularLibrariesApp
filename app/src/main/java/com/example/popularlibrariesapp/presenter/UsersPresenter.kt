@@ -13,7 +13,8 @@ import moxy.MvpPresenter
 
 const val GITHUB_USER_KEY = "GITHUB_USER_KEY"
 
-class UsersPresenter(val uiScheduler: Scheduler,
+class UsersPresenter(
+    private val uiScheduler: Scheduler,
     private val usersRepo: IGitHubUsersRepo,
     private val router: Router,
     private val screens: IScreens
