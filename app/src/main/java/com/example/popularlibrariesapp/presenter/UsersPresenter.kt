@@ -1,18 +1,19 @@
 package com.example.popularlibrariesapp.presenter
 
-import com.example.popularlibrariesapp.model.GitHubUser
-import com.example.popularlibrariesapp.model.IGitHubUsersRepo
+import com.example.popularlibrariesapp.model.network.GitHubUser
+import com.example.popularlibrariesapp.model.network.IGitHubUsersRepo
 import com.example.popularlibrariesapp.recyclerView.IUserListPresenter
 import com.example.popularlibrariesapp.recyclerView.UserItemView
 import com.example.popularlibrariesapp.screens.IScreens
 import com.example.popularlibrariesapp.view.UsersView
 import com.github.terrakok.cicerone.Router
+import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import moxy.MvpPresenter
 
 const val GITHUB_USER_KEY = "GITHUB_USER_KEY"
 
-class UsersPresenter(
+class UsersPresenter(val uiScheduler: Scheduler,
     private val usersRepo: IGitHubUsersRepo,
     private val router: Router,
     private val screens: IScreens
@@ -25,7 +26,8 @@ class UsersPresenter(
         override var itemClickListener: ((UserItemView) -> Unit)? = null
         override fun bindView(view: UserItemView) {
             val user = users[view.pos]
-            view.setLogin(user.login)
+            user.login?.let { view.setLogin(it) }
+            user.avatarUrl?.let { view.loadAvatar(it) }
         }
 
         override fun getCount(): Int {
@@ -49,8 +51,10 @@ class UsersPresenter(
 
         val usersRx = usersRepo.getUsers()
         usersRx
+            .observeOn(uiScheduler)
             .doOnSubscribe { d -> compositeDisposable.addAll(d) }
             .subscribe({
+                usersListPresenter.users.clear()
                 usersListPresenter.users.addAll(it)
                 viewState.updateList()
                 println("onSuccess")

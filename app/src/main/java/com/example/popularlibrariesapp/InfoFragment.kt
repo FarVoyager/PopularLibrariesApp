@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.popularlibrariesapp.databinding.FragmentInfoBinding
-import com.example.popularlibrariesapp.model.GitHubUser
+import com.example.popularlibrariesapp.model.network.GitHubUser
 import com.example.popularlibrariesapp.presenter.InfoPresenter
 import com.example.popularlibrariesapp.presenter.GITHUB_USER_KEY
 import com.example.popularlibrariesapp.view.BackButtonListener

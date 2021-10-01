@@ -4,14 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.popularlibrariesapp.databinding.FragmentUsersBinding
-import com.example.popularlibrariesapp.model.GitHubUsersRepo
+import com.example.popularlibrariesapp.model.network.GitHubUsersRepo
+import com.example.popularlibrariesapp.model.network.ApiHolder
 import com.example.popularlibrariesapp.presenter.UsersPresenter
 import com.example.popularlibrariesapp.recyclerView.UsersRecyclerViewAdapter
 import com.example.popularlibrariesapp.screens.AndroidScreens
 import com.example.popularlibrariesapp.view.BackButtonListener
 import com.example.popularlibrariesapp.view.UsersView
+import com.example.popularlibrariesapp.view.glide.GlideImageLoader
+import com.example.popularlibrariesapp.view.glide.IImageLoader
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
@@ -19,7 +24,7 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
 
     companion object { fun newInstance() = UsersFragment() }
     private var binding: FragmentUsersBinding? = null
-    private val presenter by moxyPresenter { UsersPresenter(GitHubUsersRepo(), App.instance.router, AndroidScreens()) }
+    private val presenter by moxyPresenter { UsersPresenter(AndroidSchedulers.mainThread(), GitHubUsersRepo(ApiHolder.api), App.instance.router, AndroidScreens()) }
     private var adapter: UsersRecyclerViewAdapter? = null
 
     override fun onCreateView(
@@ -31,7 +36,7 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
 
     override fun init() {
         binding?.rvUsers?.layoutManager = LinearLayoutManager(context)
-        adapter = UsersRecyclerViewAdapter(presenter.usersListPresenter)
+        adapter = UsersRecyclerViewAdapter(presenter.usersListPresenter, GlideImageLoader())
         binding?.rvUsers?.adapter = adapter
     }
 
