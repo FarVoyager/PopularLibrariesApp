@@ -7,4 +7,7 @@ import moxy.viewstate.strategy.StateStrategyType
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface InfoView: MvpView {
     fun setLogin(login: String)
+
+    fun init()
+    fun updateList()
 }

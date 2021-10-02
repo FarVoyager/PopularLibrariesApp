@@ -2,8 +2,8 @@ package com.example.popularlibrariesapp.presenter
 
 import com.example.popularlibrariesapp.model.network.GitHubUser
 import com.example.popularlibrariesapp.model.network.IGitHubUsersRepo
-import com.example.popularlibrariesapp.recyclerView.IUserListPresenter
-import com.example.popularlibrariesapp.recyclerView.UserItemView
+import com.example.popularlibrariesapp.recyclerView.usersRecyclerView.IUserListPresenter
+import com.example.popularlibrariesapp.recyclerView.usersRecyclerView.UserItemView
 import com.example.popularlibrariesapp.screens.IScreens
 import com.example.popularlibrariesapp.view.UsersView
 import com.github.terrakok.cicerone.Router

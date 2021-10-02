@@ -5,12 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.popularlibrariesapp.databinding.FragmentInfoBinding
 import com.example.popularlibrariesapp.model.network.ApiHolder
 import com.example.popularlibrariesapp.model.network.GitHubUser
 import com.example.popularlibrariesapp.model.network.GitHubUsersRepo
 import com.example.popularlibrariesapp.presenter.InfoPresenter
 import com.example.popularlibrariesapp.presenter.GITHUB_USER_KEY
+import com.example.popularlibrariesapp.recyclerView.reposRecyclerView.ReposRecyclerViewAdapter
 import com.example.popularlibrariesapp.view.BackButtonListener
 import com.example.popularlibrariesapp.view.InfoView
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -20,6 +22,7 @@ import moxy.ktx.moxyPresenter
 class InfoFragment : MvpAppCompatFragment(), InfoView, BackButtonListener {
 
     var binding: FragmentInfoBinding? = null
+    private var adapter: ReposRecyclerViewAdapter? = null
     private val presenter by moxyPresenter {
         InfoPresenter(
             AndroidSchedulers.mainThread(),
@@ -39,10 +42,18 @@ class InfoFragment : MvpAppCompatFragment(), InfoView, BackButtonListener {
         presenter.setLoginHeader()
     }
 
-    override fun backPressed() = presenter.backPressed()
-
     override fun setLogin(login: String) {
         binding?.infoLogin?.text = login
+    }
+
+    override fun init() {
+        binding?.rvUserRepos?.layoutManager =LinearLayoutManager(context)
+        adapter = ReposRecyclerViewAdapter(presenter.repoListPresenter)
+        binding?.rvUserRepos?.adapter = adapter
+    }
+
+    override fun updateList() {
+        adapter?.notifyDataSetChanged()
     }
 
     companion object {
@@ -54,4 +65,12 @@ class InfoFragment : MvpAppCompatFragment(), InfoView, BackButtonListener {
             return fragment
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+
+    override fun backPressed() = presenter.backPressed()
+
 }
