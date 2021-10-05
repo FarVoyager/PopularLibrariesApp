@@ -9,5 +9,5 @@ interface IDataSource {
     fun getUsers(): Single<List<GitHubUser>>
 
     @GET
-    fun getUserRepos(@Url url: String): Single<List<UserRepo>>
+    fun getUserRepos(@Url url: String): Single<List<GitHubRepository>>
 }

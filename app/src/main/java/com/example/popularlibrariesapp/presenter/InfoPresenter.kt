@@ -2,7 +2,8 @@ package com.example.popularlibrariesapp.presenter
 
 import com.example.popularlibrariesapp.model.network.GitHubUser
 import com.example.popularlibrariesapp.model.network.IGitHubUsersRepo
-import com.example.popularlibrariesapp.model.network.UserRepo
+import com.example.popularlibrariesapp.model.network.GitHubRepository
+import com.example.popularlibrariesapp.model.room.IGitHubRepositoriesRepo
 import com.example.popularlibrariesapp.recyclerView.reposRecyclerView.IRepoListPresenter
 import com.example.popularlibrariesapp.recyclerView.reposRecyclerView.RepoItemView
 import com.example.popularlibrariesapp.view.InfoView
@@ -15,13 +16,13 @@ class InfoPresenter(
     private val uiScheduler: Scheduler,
     private val router: Router,
     private val user: GitHubUser,
-    private val usersRepo: IGitHubUsersRepo
+    private val reposRepo: IGitHubRepositoriesRepo
 ) : MvpPresenter<InfoView>() {
 
     private var compositeDisposable = CompositeDisposable()
 
     class RepoListPresenter: IRepoListPresenter {
-        val userRepos = mutableListOf<UserRepo>()
+        val userRepos = mutableListOf<GitHubRepository>()
         override var itemClickListener: ((RepoItemView) -> Unit)? = null
         override fun bindView(view: RepoItemView) {
             val repo = userRepos[view.pos]
@@ -51,7 +52,7 @@ class InfoPresenter(
     }
 
     private fun loadData() {
-        val userReposRx = usersRepo.getUserRepos("/users/${user.login}/repos")
+        val userReposRx = reposRepo.getRepositories(user)
         userReposRx
             .observeOn(uiScheduler)
             .doOnSubscribe { d -> compositeDisposable.addAll(d) }

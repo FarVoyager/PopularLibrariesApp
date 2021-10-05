@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.popularlibrariesapp.databinding.FragmentUsersBinding
 import com.example.popularlibrariesapp.model.network.GitHubUsersRepo
 import com.example.popularlibrariesapp.model.network.ApiHolder
+import com.example.popularlibrariesapp.model.room.Database
+import com.example.popularlibrariesapp.model.room.RetrofitGitHubUsersRepo
+import com.example.popularlibrariesapp.model.room.networkStatus.AndroidNetworkStatus
 import com.example.popularlibrariesapp.presenter.UsersPresenter
 import com.example.popularlibrariesapp.recyclerView.usersRecyclerView.UsersRecyclerViewAdapter
 import com.example.popularlibrariesapp.screens.AndroidScreens
@@ -22,7 +25,12 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
 
     companion object { fun newInstance() = UsersFragment() }
     private var binding: FragmentUsersBinding? = null
-    private val presenter by moxyPresenter { UsersPresenter(AndroidSchedulers.mainThread(), GitHubUsersRepo(ApiHolder.api), App.instance.router, AndroidScreens()) }
+    private val presenter by moxyPresenter {
+        UsersPresenter(AndroidSchedulers.mainThread(),
+            RetrofitGitHubUsersRepo(ApiHolder.api, AndroidNetworkStatus(requireContext()), Database.getInstance()),
+            App.instance.router,
+            AndroidScreens())
+    }
     private var adapter: UsersRecyclerViewAdapter? = null
 
     override fun onCreateView(

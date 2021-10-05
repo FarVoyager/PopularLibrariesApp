@@ -10,6 +10,10 @@ import com.example.popularlibrariesapp.databinding.FragmentInfoBinding
 import com.example.popularlibrariesapp.model.network.ApiHolder
 import com.example.popularlibrariesapp.model.network.GitHubUser
 import com.example.popularlibrariesapp.model.network.GitHubUsersRepo
+import com.example.popularlibrariesapp.model.room.Database
+import com.example.popularlibrariesapp.model.room.IGitHubRepositoriesRepo
+import com.example.popularlibrariesapp.model.room.RetrofitGitHubRepositoriesRepo
+import com.example.popularlibrariesapp.model.room.networkStatus.AndroidNetworkStatus
 import com.example.popularlibrariesapp.presenter.InfoPresenter
 import com.example.popularlibrariesapp.presenter.GITHUB_USER_KEY
 import com.example.popularlibrariesapp.recyclerView.reposRecyclerView.ReposRecyclerViewAdapter
@@ -28,7 +32,8 @@ class InfoFragment : MvpAppCompatFragment(), InfoView, BackButtonListener {
             AndroidSchedulers.mainThread(),
             App.instance.router,
             arguments?.get(GITHUB_USER_KEY) as GitHubUser,
-            GitHubUsersRepo(ApiHolder.api)
+            RetrofitGitHubRepositoriesRepo(ApiHolder.api, AndroidNetworkStatus(requireContext()),
+                Database.getInstance())
     )}
 
     override fun onCreateView(
