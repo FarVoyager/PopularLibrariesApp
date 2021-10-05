@@ -11,7 +11,7 @@ import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import moxy.MvpPresenter
-//репозитории пользователя получены, осталось отобразить
+
 class InfoPresenter(
     private val uiScheduler: Scheduler,
     private val router: Router,
