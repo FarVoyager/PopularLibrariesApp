@@ -4,15 +4,15 @@ import com.example.popularlibrariesapp.model.network.GitHubUser
 import com.example.popularlibrariesapp.model.network.IDataSource
 import com.example.popularlibrariesapp.model.network.IGitHubUsersRepo
 import com.example.popularlibrariesapp.model.network.GitHubRepository
+import com.example.popularlibrariesapp.model.room.cache.IUsersCache
 import com.example.popularlibrariesapp.model.room.networkStatus.INetworkStatus
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 
-//Практическое задание 1 - вытащить кэширование в отдельный класс RoomUserCache и внедрить его сюда через интерфейс IUserCache
 class RetrofitGitHubUsersRepo(
     private val api: IDataSource,
     private val networkStatus: INetworkStatus,
-    private val db: Database
+    private val usersCache: IUsersCache,
     ): IGitHubUsersRepo {
     override fun getUsers(): Single<List<GitHubUser>> =
         networkStatus.isOnlineSingle().flatMap {
@@ -27,17 +27,13 @@ class RetrofitGitHubUsersRepo(
                                     user.login ?: "",
                                     user.avatarUrl ?: "",
                                     user.reposUrl ?: "") }
-                            db.userDao.insert(roomUsers)
+                            usersCache.insertUsersToCache(roomUsers)
                             users
                         }
                     }
             } else {
                 println("Missing network connection, loading from local cache...")
-                Single.fromCallable {
-                    db.userDao.getAll().map { roomUser ->
-                        GitHubUser(roomUser.id, roomUser.login, roomUser.avatarUrl, roomUser.reposUrl)
-                    }
-                }
+                usersCache.getCachedUsers()
             }
         }.subscribeOn(Schedulers.io())
 
