@@ -25,15 +25,12 @@ import javax.inject.Inject
 class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
 
     companion object {
-        fun newInstance() = UsersFragment().apply {
-            App.instance.appComponent.inject(this)
-        }
+        fun newInstance() = UsersFragment()
     }
 
     private var binding: FragmentUsersBinding? = null
     private val presenter by moxyPresenter {
-        UsersPresenter(
-            AndroidSchedulers.mainThread()).apply {
+        UsersPresenter().apply {
                 App.instance.appComponent.inject(this)
         }
     }

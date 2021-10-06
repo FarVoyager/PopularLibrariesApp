@@ -11,13 +11,14 @@ import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import moxy.MvpPresenter
+import javax.inject.Inject
+
 //репозитории пользователя получены, осталось отобразить
-class InfoPresenter(
-    private val uiScheduler: Scheduler,
-    private val router: Router,
-    private val user: GitHubUser,
-    private val reposRepo: IGitHubRepositoriesRepo
-) : MvpPresenter<InfoView>() {
+class InfoPresenter(private val user: GitHubUser) : MvpPresenter<InfoView>() {
+
+    @Inject lateinit var reposRepo: IGitHubRepositoriesRepo
+    @Inject lateinit var router: Router
+    @Inject lateinit var scheduler: Scheduler
 
     private var compositeDisposable = CompositeDisposable()
 
@@ -54,7 +55,7 @@ class InfoPresenter(
     private fun loadData() {
         val userReposRx = reposRepo.getRepositories(user)
         userReposRx
-            .observeOn(uiScheduler)
+            .observeOn(scheduler)
             .doOnSubscribe { d -> compositeDisposable.addAll(d) }
             .subscribe({
                 repoListPresenter.userRepos.apply {

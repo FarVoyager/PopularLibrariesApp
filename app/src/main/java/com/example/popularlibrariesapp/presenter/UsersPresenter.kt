@@ -14,11 +14,12 @@ import javax.inject.Inject
 
 const val GITHUB_USER_KEY = "GITHUB_USER_KEY"
 
-class UsersPresenter(private val uiScheduler: Scheduler) : MvpPresenter<UsersView>() {
+class UsersPresenter() : MvpPresenter<UsersView>() {
 
     @Inject lateinit var usersRepo: IGitHubUsersRepo
     @Inject lateinit var router: Router
     @Inject lateinit var screens: IScreens
+    @Inject lateinit var scheduler: Scheduler
 
 
     private var compositeDisposable = CompositeDisposable()
@@ -53,7 +54,7 @@ class UsersPresenter(private val uiScheduler: Scheduler) : MvpPresenter<UsersVie
 
         val usersRx = usersRepo.getUsers()
         usersRx
-            .observeOn(uiScheduler)
+            .observeOn(scheduler)
             .doOnSubscribe { d -> compositeDisposable.addAll(d) }
             .subscribe({
                 usersListPresenter.users.clear()
