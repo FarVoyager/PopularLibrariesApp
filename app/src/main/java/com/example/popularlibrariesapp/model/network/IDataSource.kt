@@ -4,7 +4,7 @@ import io.reactivex.rxjava3.core.Single
 import retrofit2.http.GET
 import retrofit2.http.Url
 
-interface IDataSource {
+interface  IDataSource {
     @GET ("/users")
     fun getUsers(): Single<List<GitHubUser>>
 

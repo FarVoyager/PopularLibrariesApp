@@ -2,19 +2,24 @@ package com.example.popularlibrariesapp
 
 import android.os.Bundle
 import com.example.popularlibrariesapp.databinding.ActivityMainBinding
+import com.example.popularlibrariesapp.di.AbsActivity
 import com.example.popularlibrariesapp.presenter.MainPresenter
 import com.example.popularlibrariesapp.screens.AndroidScreens
 import com.example.popularlibrariesapp.view.BackButtonListener
 import com.example.popularlibrariesapp.view.MainView
+import com.github.terrakok.cicerone.NavigatorHolder
+import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import moxy.MvpAppCompatActivity
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
-class MainActivity : MvpAppCompatActivity(), MainView {
+class MainActivity : AbsActivity(), MainView {
+
 
     private var binding: ActivityMainBinding? = null
     private val navigator = AppNavigator(this,R.id.container)
-    private val presenter by moxyPresenter { MainPresenter(App.instance.router, AndroidScreens()) }
+    private val presenter by moxyPresenter { MainPresenter(router, androidScreens) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,12 +29,12 @@ class MainActivity : MvpAppCompatActivity(), MainView {
 
     override fun onResumeFragments() {
         super.onResumeFragments()
-        App.instance.navigatorHolder.setNavigator(navigator)
+        navigatorHolder.setNavigator(navigator)
     }
 
     override fun onPause() {
         super.onPause()
-        App.instance.navigatorHolder.removeNavigator()
+        navigatorHolder.removeNavigator()
     }
 
     override fun onBackPressed() {
