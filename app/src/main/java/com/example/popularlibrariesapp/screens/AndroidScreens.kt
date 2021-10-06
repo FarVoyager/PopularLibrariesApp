@@ -5,8 +5,9 @@ import com.example.popularlibrariesapp.UsersFragment
 import com.example.popularlibrariesapp.model.network.GitHubUser
 import com.github.terrakok.cicerone.Screen
 import com.github.terrakok.cicerone.androidx.FragmentScreen
+import javax.inject.Inject
 
-class AndroidScreens: IScreens {
+class AndroidScreens @Inject constructor() : IScreens {
     override fun users(): Screen {
         return FragmentScreen { UsersFragment.newInstance() }
     }

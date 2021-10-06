@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.popularlibrariesapp.databinding.FragmentUsersBinding
+import com.example.popularlibrariesapp.di.AbsFragment
 import com.example.popularlibrariesapp.model.network.ApiHolder
+import com.example.popularlibrariesapp.model.network.GitHubUsersRepo
 import com.example.popularlibrariesapp.model.room.Database
 import com.example.popularlibrariesapp.model.room.RetrofitGitHubUsersRepo
 import com.example.popularlibrariesapp.model.room.cache.UsersCache
@@ -20,16 +22,20 @@ import com.example.popularlibrariesapp.view.glide.GlideImageLoader
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
-class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
+class UsersFragment : AbsFragment(), UsersView, BackButtonListener {
+
+    @Inject
+    lateinit var gitHubUsersRepo: RetrofitGitHubUsersRepo
 
     companion object { fun newInstance() = UsersFragment() }
     private var binding: FragmentUsersBinding? = null
     private val presenter by moxyPresenter {
-        UsersPresenter(AndroidSchedulers.mainThread(),
-            RetrofitGitHubUsersRepo(ApiHolder.api, AndroidNetworkStatus(requireContext()), UsersCache()),
-            App.instance.router,
-            AndroidScreens())
+        UsersPresenter(scheduler,
+            gitHubUsersRepo,
+            router,
+            androidScreens)
     }
     private var adapter: UsersRecyclerViewAdapter? = null
 

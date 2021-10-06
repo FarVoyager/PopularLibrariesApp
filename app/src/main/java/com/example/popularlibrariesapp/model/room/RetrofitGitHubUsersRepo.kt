@@ -8,8 +8,9 @@ import com.example.popularlibrariesapp.model.room.cache.IUsersCache
 import com.example.popularlibrariesapp.model.room.networkStatus.INetworkStatus
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
+import javax.inject.Inject
 
-class RetrofitGitHubUsersRepo(
+class RetrofitGitHubUsersRepo @Inject constructor(
     private val api: IDataSource,
     private val networkStatus: INetworkStatus,
     private val usersCache: IUsersCache,

@@ -4,10 +4,10 @@ import com.example.popularlibrariesapp.model.network.GitHubUser
 import com.example.popularlibrariesapp.model.room.Database
 import com.example.popularlibrariesapp.model.room.RoomGitHubUser
 import io.reactivex.rxjava3.core.Single
+import javax.inject.Inject
 
-class UsersCache: IUsersCache {
+class UsersCache @Inject constructor(private val db: Database): IUsersCache {
 
-    private val db = Database.getInstance()
     override fun getCachedUsers(): Single<List<GitHubUser>> =
         Single.fromCallable {
             db.userDao.getAll().map { roomUser ->

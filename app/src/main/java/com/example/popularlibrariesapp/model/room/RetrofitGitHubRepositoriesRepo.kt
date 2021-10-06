@@ -8,8 +8,9 @@ import com.example.popularlibrariesapp.model.room.networkStatus.INetworkStatus
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.lang.RuntimeException
+import javax.inject.Inject
 
-class RetrofitGitHubRepositoriesRepo(
+class RetrofitGitHubRepositoriesRepo @Inject constructor(
     private val api: IDataSource,
     private val networkStatus: INetworkStatus,
     private val reposCache: IRepositoriesCache,

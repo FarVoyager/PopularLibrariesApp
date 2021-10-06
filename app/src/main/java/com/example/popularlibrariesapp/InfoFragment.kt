@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.popularlibrariesapp.databinding.FragmentInfoBinding
+import com.example.popularlibrariesapp.di.AbsFragment
 import com.example.popularlibrariesapp.model.network.ApiHolder
 import com.example.popularlibrariesapp.model.network.GitHubUser
 import com.example.popularlibrariesapp.model.room.Database
@@ -21,22 +22,22 @@ import com.example.popularlibrariesapp.view.InfoView
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
-class InfoFragment : MvpAppCompatFragment(), InfoView, BackButtonListener {
+class InfoFragment : AbsFragment(), InfoView, BackButtonListener {
+
+    @Inject
+    lateinit var gitHubRepositoriesRepo: RetrofitGitHubRepositoriesRepo
 
     var binding: FragmentInfoBinding? = null
     private var adapter: ReposRecyclerViewAdapter? = null
 
     private val presenter by moxyPresenter {
         InfoPresenter(
-            AndroidSchedulers.mainThread(),
-            App.instance.router,
+            scheduler,
+            router,
             arguments?.get(GITHUB_USER_KEY) as GitHubUser,
-            RetrofitGitHubRepositoriesRepo(
-                ApiHolder.api,
-                AndroidNetworkStatus(requireContext()),
-                RepositoriesCache()
-            )
+            gitHubRepositoriesRepo
         )
     }
 
