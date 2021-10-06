@@ -35,7 +35,7 @@ class InfoFragment : MvpAppCompatFragment(), InfoView, BackButtonListener {
             RetrofitGitHubRepositoriesRepo(
                 ApiHolder.api,
                 AndroidNetworkStatus(requireContext()),
-                RepositoriesCache()
+                RepositoriesCache(Database.getInstance())
             )
         )
     }

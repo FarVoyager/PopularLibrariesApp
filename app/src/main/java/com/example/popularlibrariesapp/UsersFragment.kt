@@ -27,7 +27,7 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
     private var binding: FragmentUsersBinding? = null
     private val presenter by moxyPresenter {
         UsersPresenter(AndroidSchedulers.mainThread(),
-            RetrofitGitHubUsersRepo(ApiHolder.api, AndroidNetworkStatus(requireContext()), UsersCache()),
+            RetrofitGitHubUsersRepo(ApiHolder.api, AndroidNetworkStatus(requireContext()), UsersCache(Database.getInstance())),
             App.instance.router,
             AndroidScreens())
     }
