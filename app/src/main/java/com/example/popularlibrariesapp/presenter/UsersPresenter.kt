@@ -10,15 +10,16 @@ import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import moxy.MvpPresenter
+import javax.inject.Inject
 
 const val GITHUB_USER_KEY = "GITHUB_USER_KEY"
 
-class UsersPresenter(
-    private val uiScheduler: Scheduler,
-    private val usersRepo: IGitHubUsersRepo,
-    private val router: Router,
-    private val screens: IScreens
-) : MvpPresenter<UsersView>() {
+class UsersPresenter(private val uiScheduler: Scheduler) : MvpPresenter<UsersView>() {
+
+    @Inject lateinit var usersRepo: IGitHubUsersRepo
+    @Inject lateinit var router: Router
+    @Inject lateinit var screens: IScreens
+
 
     private var compositeDisposable = CompositeDisposable()
 

@@ -20,16 +20,22 @@ import com.example.popularlibrariesapp.view.glide.GlideImageLoader
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
 class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
 
-    companion object { fun newInstance() = UsersFragment() }
+    companion object {
+        fun newInstance() = UsersFragment().apply {
+            App.instance.appComponent.inject(this)
+        }
+    }
+
     private var binding: FragmentUsersBinding? = null
     private val presenter by moxyPresenter {
-        UsersPresenter(AndroidSchedulers.mainThread(),
-            RetrofitGitHubUsersRepo(ApiHolder.api, AndroidNetworkStatus(requireContext()), UsersCache()),
-            App.instance.router,
-            AndroidScreens())
+        UsersPresenter(
+            AndroidSchedulers.mainThread()).apply {
+                App.instance.appComponent.inject(this)
+        }
     }
     private var adapter: UsersRecyclerViewAdapter? = null
 
@@ -38,7 +44,7 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = FragmentUsersBinding.inflate(inflater, container, false)
-        .also{ binding = it }.root
+        .also { binding = it }.root
 
     override fun init() {
         binding?.rvUsers?.layoutManager = LinearLayoutManager(context)

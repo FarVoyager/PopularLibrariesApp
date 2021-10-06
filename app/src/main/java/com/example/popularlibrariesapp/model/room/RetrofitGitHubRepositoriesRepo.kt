@@ -12,7 +12,6 @@ import java.lang.RuntimeException
 class RetrofitGitHubRepositoriesRepo(
     private val api: IDataSource,
     private val networkStatus: INetworkStatus,
-    private val db: Database,
     private val reposCache: IRepositoriesCache,
 ) : IGitHubRepositoriesRepo {
     override fun getRepositories(user: GitHubUser): Single<List<GitHubRepository>> =
@@ -23,7 +22,7 @@ class RetrofitGitHubRepositoriesRepo(
                         .flatMap { repositories ->
                             Single.fromCallable {
                                 val roomUser = user.login?.let {
-                                    db.userDao.findByLogin(it)
+                                    reposCache.getUserByLogin(it)
                                 } ?: throw RuntimeException("No such user in cache")
                                 val roomRepos = repositories.map {
                                     RoomGitHubRepository(it.id ?: "", it.name ?: "", roomUser.id)

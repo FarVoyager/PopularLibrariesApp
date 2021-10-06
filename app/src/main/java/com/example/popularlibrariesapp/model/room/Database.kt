@@ -13,15 +13,15 @@ abstract class Database: RoomDatabase() {
     abstract val repositoryDao: RepositoryDao
 
     companion object {
-        private const val DB_NAME = "database.db"
+        const val DB_NAME = "database.db"
         private var instance: com.example.popularlibrariesapp.model.room.Database? = null
         fun getInstance() = instance ?: throw RuntimeException("Database has not been created. Please call create(context)")
 
-        fun create(context: Context) {
-            if (instance == null) {
-                instance = Room.databaseBuilder(context,com.example.popularlibrariesapp.model.room.Database::class.java, DB_NAME)
-                    .build()
-            }
-        }
+//        fun create(context: Context) {
+//            if (instance == null) {
+//                instance = Room.databaseBuilder(context,com.example.popularlibrariesapp.model.room.Database::class.java, DB_NAME)
+//                    .build()
+//            }
+//        }
     }
 }

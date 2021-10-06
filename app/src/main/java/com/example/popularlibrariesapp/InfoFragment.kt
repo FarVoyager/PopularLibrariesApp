@@ -18,21 +18,28 @@ import com.example.popularlibrariesapp.presenter.GITHUB_USER_KEY
 import com.example.popularlibrariesapp.recyclerView.reposRecyclerView.ReposRecyclerViewAdapter
 import com.example.popularlibrariesapp.view.BackButtonListener
 import com.example.popularlibrariesapp.view.InfoView
+import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
 class InfoFragment : MvpAppCompatFragment(), InfoView, BackButtonListener {
+
+    @Inject lateinit var database: Database
+    @Inject lateinit var router: Router
 
     var binding: FragmentInfoBinding? = null
     private var adapter: ReposRecyclerViewAdapter? = null
     private val presenter by moxyPresenter {
         InfoPresenter(
             AndroidSchedulers.mainThread(),
-            App.instance.router,
+            router,
             arguments?.get(GITHUB_USER_KEY) as GitHubUser,
-            RetrofitGitHubRepositoriesRepo(ApiHolder.api, AndroidNetworkStatus(requireContext()),
-                Database.getInstance(), RepositoriesCache())
+            RetrofitGitHubRepositoriesRepo(
+                ApiHolder.api, AndroidNetworkStatus(App.instance),
+                RepositoriesCache(database)
+            )
     )}
 
     override fun onCreateView(
@@ -64,8 +71,9 @@ class InfoFragment : MvpAppCompatFragment(), InfoView, BackButtonListener {
         fun newInstance(user: GitHubUser): Fragment {
             val fragment = InfoFragment()
             val bundle = Bundle()
-            bundle.putParcelable(GITHUB_USER_KEY, user)
-            fragment.arguments = bundle
+                bundle.putParcelable(GITHUB_USER_KEY, user)
+                fragment.arguments = bundle
+            App.instance.appComponent.inject(fragment)
             return fragment
         }
     }
