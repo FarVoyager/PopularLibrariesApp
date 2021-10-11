@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -14,6 +16,10 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 
     buildTypes {
@@ -33,11 +39,38 @@ android {
 
 dependencies {
 
+    //General
     implementation 'androidx.core:core-ktx:1.6.0'
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
-    testImplementation 'junit:junit:4.+'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    //Moxy
+    implementation "com.github.moxy-community:moxy:2.1.2"
+    implementation "com.github.moxy-community:moxy-compiler:2.1.2"
+    implementation "com.github.moxy-community:moxy-ktx:2.1.2"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    kapt "com.github.moxy-community:moxy-compiler:2.2.2"
+    implementation "com.github.moxy-community:moxy-androidx:2.1.2"
+    //Cicerone
+    implementation 'com.github.terrakok:cicerone:6.6'
+    //rxJava
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
+    //okHttp
+    implementation 'com.squareup.okhttp3:okhttp:4.6.0'
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.2")
+    //retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
+    implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
+    //Room
+    implementation 'androidx.room:room-runtime:2.3.0'
+    kapt 'androidx.room:room-compiler:2.3.0'
+    //Glide
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    //Test
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
